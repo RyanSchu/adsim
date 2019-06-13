@@ -10,4 +10,5 @@ Pipeline is tested on publicly available data from [1000 genomes](http://ftp.100
 * [Admixture simulation tool](https://github.com/slowkoni/admixture-simulation)
 * [plink](https://www.cog-genomics.org/plink/1.9/)
 * [vcftools](http://vcftools.sourceforge.net/man_latest.html)
-* [bcftools](https://samtools.github.io/bcftools/bcftools.html)
+* [bcftools](https://samtools.github.io/bcftools/bcftools.html)  
+At testing all software is run on a linux machine running ubuntu
