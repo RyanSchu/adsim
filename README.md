@@ -8,11 +8,19 @@ This pipeline has been made mostly to maintain consistency for ease of benchmark
 
 Pipeline is tested on publicly available data from [1000 genomes](http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000_genomes_project/release/20190312_biallelic_SNV_and_INDEL/)
 
+### Workflow
+Pipeline runs in two steps 
+1) Simulate the population for a particular chromosome
+2) Prune and/or thin the simulated genotypes to a certain number of snps
+
+### Design principles
+This pipeline is only designed to run on one chromosome at a time. If you wish to run it on multiple chromosomes you'll either have to run it multiple times or edit the pipeline accordingly. 
+This pipeline has been designed with the intention of running each population individually, resulting in different snps appearing in each of your pruned/thinned files. In theory, however, it should be simple to keep your snp list consistent across all populations by combining each into one vcf file, pruning/thinning from there, and finally separating the vcf file by population.
+
 ### Software
 * [Admixture simulation tool](https://github.com/slowkoni/admixture-simulation)
 * [plink](https://www.cog-genomics.org/plink/1.9/)
 * [vcftools](http://vcftools.sourceforge.net/man_latest.html)
-* [bcftools](https://samtools.github.io/bcftools/bcftools.html)  
 * awk
 * sed
 * tabix
