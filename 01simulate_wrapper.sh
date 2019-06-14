@@ -1,8 +1,7 @@
 #!/bin/bash
 
-## takes input vcf and a list of samples - sample list are generated beforehand
-## By default doesn't subset chr, but in general only 22 is necessary
-## 
+## takes input vcf, a list of samples, and genetic map - sample list are generated beforehand
+## simulates all of a given chr without pruning or thinning - pruning and thinning are done afterwards, which has been found to produce better results while testing. Or maybe I just fucked up the first time I did it.
 
 chrNumDefault=22
 outPathDefault="./adsim"
