@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ## takes input vcf and a list of samples - sample list are generated beforehand
 ## By default doesn't subset chr, but in general only 22 is necessary
 ## 
