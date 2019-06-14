@@ -16,4 +16,6 @@ Pipeline is tested on publicly available data from [1000 genomes](http://ftp.100
 * awk
 * sed
 * tabix
+
+
 At testing all software is run on a linux machine running ubuntu
