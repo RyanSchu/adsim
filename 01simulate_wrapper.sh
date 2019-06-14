@@ -2,7 +2,7 @@
 
 ## takes input vcf, a list of samples, and genetic map - sample list are generated beforehand
 ## simulates all of a given chr without pruning or thinning - pruning and thinning are done afterwards, which has been found to produce better results while testing. Or maybe I just fucked up the first time I did it.
-
+## calls only vcftools and an rscript
 chrNumDefault=22
 outPathDefault="./adsim"
 numGenDefault=6
