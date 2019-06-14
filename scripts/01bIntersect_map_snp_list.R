@@ -13,9 +13,13 @@ args <- parser$parse_args()
 
 "%&%" = function(a,b) paste(a,b,sep="")
 
-map<-fread(args$map, header = F)
-snps<-fread(args$snps, header = F)
+map<-as.data.frame(fread(args$map, header = F))
+snps<-as.data.frame(fread(args$snps, header = F))
+#str(snps)
+#str(map)
 intersection<-inner_join(map,snps,by="V1")
-
-fwrite(intersect, args$out %&% "_genetic_map_intersection.txt", col.names = F, row.names = F,quote = F,sep=' ')
-fwrite(intersect$V1, args$out %&% "_snp_list_intersection.txt", col.names = F, row.names = F,quote = F,sep=' ')
+#str(intersection)
+fwrite(intersection, args$out %&% "_genetic_map_intersection.txt", col.names = F, row.names = F,quote = F,sep=' ')
+#str(snps)
+new_list<-select(intersection,V1) %>% as.data.frame()
+fwrite(new_list, args$out %&% "_snp_list_intersection.txt", col.names = F, row.names = F,quote = F,sep=' ')

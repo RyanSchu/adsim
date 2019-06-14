@@ -15,8 +15,12 @@ do
                 vcfFile=$2
                 shift 2
                 ;;
+      --out | -o) #same as normal plink - Path to out files and the shared prefix
+                outPath="$2"
+                shift 2
+                ;;
       --bcf) #simulated bcf file to be pruned. Required.
-                bcfFile=$2
+                bcfFile="$2"
                 shift 2
                 ;;
       --thin | -t) #thinning threshold. Default is 50000
@@ -67,14 +71,15 @@ then
   exit 1
 fi
 echo "making pruned list"
+sed -i -e "5 s/VAR/ALT/g" "${vcfFile}"
 plink --vcf "${vcfFile}" --thin-count "${thinThresh:=thinThreshDeafult}" --out "${outPath:=outPathDefault}"_thinned_list --make-just-bim
 awk '{print $2}' "${outPath}"_thinned_list.bim > "${outPath}"_thinned_list.txt
 echo "making new genetic map"
 Rscript scripts/01bIntersect_map_snp_list.R --snps "${outPath}"_thinned_list.txt --map "${geneticMap}" --out "${outPath}"_thinned
 echo "making new query vcf"
-vcftools --vcf "${vcfFile}" --snps ${outPath}"_thinned_snp_list_intersection.txt --recode --out ${outPath}"_thinned
+vcftools --vcf "${vcfFile}" --snps "${outPath}"_thinned_snp_list_intersection.txt --recode --out "${outPath}"_thinned
 echo "making new reference bcf"
-vcftools --bcf "${bcfFile}" --snps ${outPath}"_thinned_snp_list_intersection.txt --out "${outPath}"_thinned--recode-bcf
+vcftools --bcf "${bcfFile}" --snps "${outPath}"_thinned_snp_list_intersection.txt --out "${outPath}"_thinned --recode-bcf
 tabix  "${outPath}"_thinned.recode.bcf
 
 

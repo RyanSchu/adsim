@@ -45,7 +45,7 @@ do
                 echo "--generations or --gen or -g : number of generations to simulate. Default is 6."
                 echo "--out or -o : Use is as in plink - Path to out files and the shared prefix. Default is wWORKING_DIR/adsim"
                 echo "--map or -m or --genetic-map : genetic map file - format is rsid pos centimorgan-pos. REQUIRED."
-                echo "--nsim or -n : Number of samples to simulate. Default is 20.
+                echo "--nsim or -n : Number of samples to simulate. Default is 20."
                 echo "--samples : samples to generate simulations from. A small subset will be used to simulate, while the rest will become refernces. REQUIRED."
                 exit 0
                 ;;
@@ -93,29 +93,30 @@ echo "Extracting snps"
 sed '/#/d' "${outPath}"_sample_filtered.recode.vcf | awk '{print $3}' > "${outPath}"_sample_filtered.snp.list
 echo "Finding intersection with genetic map"
 Rscript scripts/01bIntersect_map_snp_list.R --snps "${outPath}"_sample_filtered.snp.list --map "${geneticMap}" --out "${outPath}"
+awk -v chr="${chrNum}" '{print "chr" chr "\t"  $2 "\t" $3}' "${outPath}"_genetic_map_intersection.txt > "${outPath}"_genetic_map_interpolated_chr"${chrNum}".txt
 echo "Creating new vcf from subset"
 vcftools --vcf "${outPath}"_sample_filtered.recode.vcf --recode --snps "${outPath}"_snp_list_intersection.txt --out  "${outPath}"_sample_filtered.intersection
-
+cd ~/software/admixture-simulation
 echo "Beginning simulation"
 if [ "${chrNum:=chrNumDefault}" = "ALL" ]
 then
-  python do-admixture-simulation.py \
-  --input-vcf 1000G_80_20.recode.vcf \
-  --sample-map ${samples} \
+  python ~/software/admixture-simulation/do-admixture-simulation.py \
+  --input-vcf "${outPath}"_sample_filtered.intersection.recode.vcf \
+  --sample-map "${samplesFile}" \
   --n-output "${numSim:=numSimDefault}" \
-  --n-generations ${numGen:=numGenDefault}" \
+  --n-generations "${numGen:=numGenDefault}" \
   --genetic-map "${outPath}"_genetic_map_intersection.txt \
   --output-basename "${outPath}"
 else
-  python do-admixture-simulation.py \
-  --input-vcf "${outPath}"_sample_filtered.intersection \
-  --sample-map "${samples} \
+  python ~/software/admixture-simulation/do-admixture-simulation.py \
+  --input-vcf "${outPath}"_sample_filtered.intersection.recode.vcf \
+  --sample-map "${samplesFile}" \
   --n-output "${numSim:=numSimDefault}" \
-  --n-generations ${numGen:=numGenDefault}" \
-  --genetic-map "${outPath}"_genetic_map_intersection.txt \
-  --chromosome "${chrNum}"
+  --n-generations "${numGen:=numGenDefault}" \
+  --genetic-map "${outPath}"_genetic_map_interpolated_chr"${chrNum}".txt \
+  --chromosome "${chrNum}" \
   --output-basename "${outPath}"
-then
+fi
 
 echo "Finished simulating. Please find outputs with the prefix ${outPath}*"
-echo "Have a nice day :)"
+echo "Have a nice day!"

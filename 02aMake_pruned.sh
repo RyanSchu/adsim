@@ -12,11 +12,15 @@ while :
 do
     case "$1" in
       --vcf) #simulated vcf file to be pruned. Required.
-                vcfFile=$2
+                vcfFile="$2"
+                shift 2
+                ;;
+      --out | -o) #same as normal plink - Path to out files and the shared prefix
+                outPath="$2"
                 shift 2
                 ;;
       --bcf) #simulated bcf file to be pruned. Required.
-                bcfFile=$2
+                bcfFile="$2"
                 shift 2
                 ;;
       --r2) #R squared threshold to filter by. Default is 0.5. 
@@ -67,13 +71,14 @@ then
   exit 1
 fi
 echo "making pruned list"
+sed -i -e "5 s/VAR/ALT/g" "${vcfFile}" ##vcftools outputs a weird header
 plink --vcf "${vcfFile}" --indep-pairwise 50 5 "${r2Threshold:=r2ThresholdDefault}" --out "${outPath:=outPathDefault}"_pruned_list
 echo "making new genetic map"
 Rscript scripts/01bIntersect_map_snp_list.R --snps "${outPath}"_pruned_list.prune.in --map "${geneticMap}" --out "${outPath}"_pruned
 echo "making new query vcf"
-vcftools --vcf "${vcfFile}" --snps ${outPath}"_pruned_snp_list_intersection.txt --out ${outPath}"_pruned --recode
+vcftools --vcf "${vcfFile}" --snps "${outPath}"_pruned_snp_list_intersection.txt --out "${outPath}"_pruned --recode
 echo "making new reference bcf"
-vcftools --bcf "${bcfFile}" --snps ${outPath}"_pruned_snp_list_intersection.txt --out ${outPath}"_pruned --recode-bcf
+vcftools --bcf "${bcfFile}" --snps "${outPath}"_pruned_snp_list_intersection.txt --out "${outPath}"_pruned --recode-bcf
 tabix  "${outPath}"_pruned.recode.bcf
 
 
