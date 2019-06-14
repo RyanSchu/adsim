@@ -1,6 +1,6 @@
 # Ad-Sim
 Pipeline for consistent and standardized simulation of admixed genotypes. Creates simulated genotypes as well as pruned and thinned genotypes for benchmarking at different snp levels.
-Based of of the code run by [Angela Andaleon](https://github.com/RyanSchu/Local_Ancestry-3-way-admixture/blob/master/class_project_scripts/02a1_simulate_admixture.sh) which in turn uses the [admixture simulation tool](https://github.com/slowkoni/admixture-simulation) created by the makers of RFMix.
+Based off of the code run by [Angela Andaleon](https://github.com/RyanSchu/Local_Ancestry-3-way-admixture/blob/master/class_project_scripts/02a1_simulate_admixture.sh) which in turn uses the [admixture simulation tool](https://github.com/slowkoni/admixture-simulation) created by the makers of RFMix.
 
 ### Data
 
