@@ -12,8 +12,8 @@ while :
 do
     case "$1" in
       --1000G) #1000 genomes vcf file to extract samples from. Required.
-                vcfFile=True
-                shift 1
+                vcfFile="$2"
+                shift 2
                 ;;
       --samples) #samples to generate admixture from. Required.
                 samplesFile="$2"
